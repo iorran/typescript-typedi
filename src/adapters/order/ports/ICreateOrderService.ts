@@ -1,3 +1,5 @@
+import { Order } from "../../../core/entity/Order";
+
 export interface ICreateOrderService {
-    execute(products: string[]): string
+  execute(products: string[]): Order;
 }

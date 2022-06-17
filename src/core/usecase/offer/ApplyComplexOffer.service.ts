@@ -29,24 +29,19 @@ export class ApplyComplexOffer implements IOfferStrategy {
     return Object.entries(convertedSimpleOffers).reduce<number>(
       (discount, convertedSimpleOffer) => {
         const [limit, offer] = convertedSimpleOffer;
-        let appliedTimes = 0;
         return (
           (discount || 0) +
           orderItems.reduce<number>((productDiscount, orderItem) => {
-            const { quantity, product } = orderItem;
-            if (
-              product.name === offer.productName &&
-              appliedTimes < Number(limit)
-            ) {
+            const { product } = orderItem;
+            if (product.name === offer.productName) {
               const productPriceWithDiscount = product.price * offer.discount;
               const totalProductPriceWithDiscount =
-                productDiscount + productPriceWithDiscount * quantity;
+                productDiscount + productPriceWithDiscount * Number(limit);
               OrderEvent.getInstance().addDiscount(
                 product.name,
                 offer.discount,
                 totalProductPriceWithDiscount
               );
-              appliedTimes++;
               return totalProductPriceWithDiscount;
             }
             return productDiscount;
